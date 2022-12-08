@@ -7,26 +7,26 @@
 # PERIOD20='20'
 # PERIOD100='100'
 
-import time
-import requests;
-from telegram.ext import *
-from telegram import *
+# import time
+# import requests;
+# from telegram.ext import *
+# from telegram import *
 
-#convert data to list
-def Convert(data):
-    datanew = data.strip("[]").split(', ')
-    return datanew;
-#get current price
+# #convert data to list
+# def Convert(data):
+#     datanew = data.strip("[]").split(', ')
+#     return datanew;
+# #get current price
 
-binance = requests.get('https://api.binance.com/api/v1/ticker/24hr')
+# binance = requests.get('https://api.binance.com/api/v1/ticker/24hr')
 
-listBUSD = [];
-f = open('listCoins.txt','r');
+# listBUSD = [];
+# f = open('listCoins.txt','r');
 
-data = f.read();
-dataNew = Convert(data);
+# data = f.read();
+# dataNew = Convert(data);
 
-f.close();
+# f.close();
 #create bot tele
 
 
@@ -175,3 +175,8 @@ f.close();
 # dispatcher.add_handler(CallbackQueryHandler(queryHandler))
 
 # updater.start_polling()
+
+f = open('result.txt','r');
+result = f.read();
+result_obj = eval(result);
+print(result_obj['url']);
