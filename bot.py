@@ -8,6 +8,7 @@ import threading;
 import os;
 from requests import *;
 import traceback;
+import handleData;
 
 
 #convert data to list
@@ -29,6 +30,9 @@ dispatcher = updater.dispatcher;
 
 def startCommand(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to crypto hunter");
+    t1 = threading.Thread(target=handleData.main());
+    t1.start();
+    t1.join();
     while 1>0:
         try:
             time.sleep(25);
