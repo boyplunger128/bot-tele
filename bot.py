@@ -47,6 +47,7 @@ def getHistoryCandle(SYMBOL):
     request =   requests.get(url);
     time.sleep(5);
     listData = request.json();
+    print('requesting...');
     print(request);
     return listData;
 
@@ -149,7 +150,7 @@ def startCommand(update: Update, context: CallbackContext):
         time.sleep(5);
     i=0;
     while 1>0:
-        if(i==1440):
+        if(i%1440==0):
             t_updatelistCoins();
 
         for coin in listCoins:
