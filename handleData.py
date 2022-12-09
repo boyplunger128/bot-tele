@@ -40,14 +40,14 @@ def main():
                 #print(coin);
                 coinHis = handleAPI.getHistoryCandle(coin);
                 #print(coinHis);
-                time.sleep(4);
+                time.sleep(2);
                 openPrice = coinHis[0][1];
                 closePrice = coinHis[0][4];
                 messageBox ='';
                 flag20 = 0;
                 flag100 = 0;
                 maValues = handleAPI.getMultiIndiValue(coin,'1h');
-                time.sleep(5);
+                time.sleep(2);
                 if(float(openPrice) < maValues[0] and maValues[0] < float(closePrice)):
                     flag20=1;
                 if(float(openPrice) < maValues[1] and maValues[1] < float(closePrice)):
@@ -77,5 +77,4 @@ def main():
                 time.sleep(1); 
     time.sleep(3);      
         
-main();
 

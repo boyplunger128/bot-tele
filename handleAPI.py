@@ -7,6 +7,7 @@ import time;
 
 def getListCoins():
     request =  requests.get('https://api.binance.com/api/v1/ticker/24hr');
+    time.sleep(5);
     datas =request.json();
     #print(len(datas));
     busdData = [];
@@ -38,6 +39,7 @@ def getHistoryCandle(SYMBOL):
     params = SYMBOL.strip("''");
     url = 'https://api.binance.com/api/v3/klines?symbol='+params+'&interval=1h&limit=2';
     request =   requests.get(url);
+    time.sleep(5);
     listData = request.json();
     print(request);
     return listData;
@@ -84,7 +86,7 @@ def getMultiIndiValue(SYMBOL,interval):
     
     # Send POST request and save the response as response object 
     response = requests.post(url = endpoint, json = parameters)
-    time.sleep(1);
+    time.sleep(3);
     # Extract data in json format 
     print(response);
     data = response.json();
