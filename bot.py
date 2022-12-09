@@ -126,30 +126,21 @@ def startCommand(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to crypto hunter");
     context.bot.send_message(chat_id=update.effective_chat.id, text="Please wait... Bot is checking... ^^");
     f1 = open('listCoins.txt','r');
-    f2 = open('result.txt','w');
     listCoins = Convert(f1.read());
-    def execbot():
+    def execbot(result):
         try:
-            print('checking coin..............');
-            f = open('result.txt','r');
-            result = f.read();
-            print('data written: ',result);
-            result_obj = eval(result);
-            image = get(result_obj['url']).content;
+            #result_obj = eval(result); -- convert string to object, but is no need now
+            image = get(result['url']).content;
             time.sleep(5);
             if image:
                 context.bot.sendMediaGroup(chat_id=update.effective_chat.id, media=[InputMediaPhoto(image, caption="")])
-                context.bot.send_message(chat_id=update.effective_chat.id, text=result_obj['message']);
-                context.bot.send_message(chat_id=update.effective_chat.id, text=result_obj['name']); 
-                f = open('result.txt','w');
-                result = f.write('');
-                f.close();
-            f.close();
+                context.bot.send_message(chat_id=update.effective_chat.id, text=result['message']);
+                context.bot.send_message(chat_id=update.effective_chat.id, text=result['name']); 
         except Exception:
             traceback.print_exc();
         time.sleep(5);
     i=0;
-    while 1>0:
+    def task():
         if(i%1440==0):
             t_updatelistCoins();
 
@@ -162,7 +153,7 @@ def startCommand(update: Update, context: CallbackContext):
                 }
                 #print(coin);
                 coinHis = getHistoryCandle(coin);
-                #print(coinHis);
+                print(coinHis);
                 time.sleep(2);
                 openPrice = coinHis[0][1];
                 closePrice = coinHis[0][4];
@@ -190,17 +181,20 @@ def startCommand(update: Update, context: CallbackContext):
                     result['url']=Url;
                     result['message']=messageBox;
                     result['name']=coin.strip("''");
-                    f2.write(str(result));
+                   
                     print(result);
-                    f2.close();
+        
                     time.sleep(5);
-                    execbot();
+                    execbot(result);
                 else:
                     context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
             except Exception:
                 traceback.print_exc();  
                 time.sleep(1); 
-    time.sleep(3);      
+    i=i+1;
+
+
+    context.job_queue.run_repeating(task(),1800,context=update.effective_chat.id);    
    
     
 
