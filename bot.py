@@ -28,18 +28,19 @@ def getListCoins():
                 busdData[i]=busdData[j];
                 busdData[j]=temp;
 
-    f=open('listCoins.txt','w');
+    #f=open('listCoins.txt','w');
     listName = [];
     for i in range(100):
         if('BUSD' in busdData[i]['symbol']):
             listName.append(busdData[i]['symbol']);
-    f.write(str(listName));
-    f.close();
+    # f.write(str(listName));
+    # f.close();
 
-    f = open('listCoins.txt','r');
-    #print(f.read());
+    # f = open('listCoins.txt','r');
+    # #print(f.read());
 
-    f.close();
+    # f.close();
+    return listName;
 
 def getHistoryCandle(SYMBOL):    
     params = SYMBOL.strip("''");
@@ -112,7 +113,7 @@ def Convert(data):
     datanew = data.strip("[]").split(', ')
     return datanew;
 
-d2 = 9;
+d2 = date.today();
 def t_updatelistCoins():
     d1 =date.today();
     thisDay = d1.strftime("%d");
@@ -125,8 +126,8 @@ dispatcher = updater.dispatcher;
 def startCommand(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to crypto hunter");
     context.bot.send_message(chat_id=update.effective_chat.id, text="Please wait... Bot is checking... ^^");
-    f1 = open('listCoins.txt','r');
-    listCoins = Convert(f1.read());
+    
+    listCoins = getListCoins();
     def execbot(result):
         try:
             #result_obj = eval(result); -- convert string to object, but is no need now
