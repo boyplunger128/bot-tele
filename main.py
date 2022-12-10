@@ -176,7 +176,14 @@
 
 # updater.start_polling()
 
-f = open('result.txt','r');
-result = f.read();
-result_obj = eval(result);
-print(result_obj['url']);
+# f = open('result.txt','r');
+# result = f.read();
+# result_obj = eval(result);
+# print(result_obj['url']);
+
+import os;
+from dotenv import load_dotenv,find_dotenv
+
+load_dotenv(find_dotenv());
+
+print(os.getenv('INTERVAL'));

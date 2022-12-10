@@ -1,14 +1,17 @@
 import time;
 from telegram.ext import *
 from telegram import *
-import constants;
 from datetime import date;
-import threading;
-import os;
 from requests import *;
 import traceback;
 import requests;
+import os;
+from dotenv import load_dotenv,find_dotenv;
+
 #handle API
+
+load_dotenv(find_dotenv());
+
 
 
 def getListCoins():
@@ -49,7 +52,7 @@ def getMaValue(SYMBOL,PERIOD):
     preSymbol = SYMBOL.replace('BUSD','');
     LastSymol = preSymbol+'/BUSD';
     print(LastSymol);
-    SecretKey = constants.API_KEY_INDIC;
+    SecretKey = os.getenv('API_KEY_INDIC');
 
     url = 'https://api.taapi.io/ma?secret='+SecretKey+'&exchange=binance&symbol='+LastSymol+'&interval=1h&period='+PERIOD;
     request =   requests.get(url);
@@ -67,7 +70,7 @@ def getMultiIndiValue(SYMBOL,interval):
     
     # Define a JSON body with parameters to be sent to the API 
     parameters ={
-        "secret": constants.API_KEY_INDIC,
+        "secret": os.getenv('API_KEY_INDIC'),
         "construct": {
             "exchange": "binance",
             "symbol": lastSymbol,
@@ -172,7 +175,7 @@ def startCommand(update: Update, context: CallbackContext):
                             messageBox = coin+' has passed Ma20';
                         alertCoin = coin+' checked!';
                 if(flag20!=0 or flag100!=0):
-                    Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?height=500&studies=MA:20&studies=MA:100&studies=RSI&symbol='+coin.strip("''")+'&key='+constants.YOUR_API_KEY_CHART;
+                    Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?height=500&studies=MA:20&studies=MA:100&studies=RSI&symbol='+coin.strip("''")+'&key='+os.getenv('YOUR_API_KEY_CHART');
                     #print(Url);
                     result['url']=Url;
                     result['message']=messageBox;
