@@ -11,3 +11,9 @@ wcwidth
 tornado
 six
 packaging
+pytz
+pyzmq
+Pygments
+pure-eval
+psutil
+pywin32
