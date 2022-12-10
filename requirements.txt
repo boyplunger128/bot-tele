@@ -16,4 +16,3 @@ pyzmq
 Pygments
 pure-eval
 psutil
-pywin32
