@@ -5,3 +5,9 @@ python-dotenv
 pyparsing
 ipython
 ipykernel 
+tzdata
+urllib3
+wcwidth
+tornado
+six
+packaging
