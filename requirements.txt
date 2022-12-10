@@ -2,3 +2,6 @@ telegram
 requests
 python-telegram-bot
 python-dotenv
+pyparsing
+ipython
+ipykernel 
