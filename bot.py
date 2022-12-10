@@ -15,10 +15,12 @@ def getListCoins():
     request =  requests.get('https://api.binance.com/api/v1/ticker/24hr');
     time.sleep(5);
     datas =request.json();
-    #print(len(datas));
+    print('Alls data is: ',datas);
     busdData = [];
     for data in datas:
-        if('BUSD' in data['symbol']):
+        str = data['symbol'];
+        symbolDefault = 'BUSD';
+        if(symbolDefault in str):
             busdData.append(data);
 
     for i in range(len(busdData)):
