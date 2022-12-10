@@ -21,6 +21,7 @@ def getListCoins():
     #print('Alls data is: ',datas);
     busdData = [];
     for data in datas:
+        #print(data);
         str = data['symbol'];
         symbolDefault = 'BUSD';
         if(symbolDefault in str):
@@ -51,7 +52,7 @@ def getHistoryCandle(SYMBOL):
 def getMaValue(SYMBOL,PERIOD):
     preSymbol = SYMBOL.replace('BUSD','');
     LastSymol = preSymbol+'/BUSD';
-    print(LastSymol);
+    #print(LastSymol);
     SecretKey = os.getenv('API_KEY_INDIC');
 
     url = 'https://api.taapi.io/ma?secret='+SecretKey+'&exchange=binance&symbol='+LastSymol+'&interval=1h&period='+PERIOD;
@@ -65,7 +66,7 @@ def getMultiIndiValue(SYMBOL,interval):
     # LastSymol = preSymbol+'/BUSD';
     # print('input value for indicheck',LastSymol);
     lastSymbol = SYMBOL.strip("''");
-    print('last symbol:',lastSymbol);
+    #print('last symbol:',lastSymbol);
     endpoint = "https://api.taapi.io/bulk";
     
     # Define a JSON body with parameters to be sent to the API 
@@ -92,13 +93,13 @@ def getMultiIndiValue(SYMBOL,interval):
     response = requests.post(url = endpoint, json = parameters)
     time.sleep(3);
     # Extract data in json format 
-    print(response);
+    #print(response);
     data = response.json();
     result = [];
     result.append(data['data'][0]['result']['value'])
     result.append(data['data'][1]['result']['value'])
 
-    print('result is: ',result);
+    #print('result is: ',result);
     return result;
 
 
@@ -125,7 +126,7 @@ def startCommand(update: Update, context: CallbackContext):
     
     listCoins = getListCoins();
 
-    print(listCoins);
+    #print(listCoins);
     def execbot(result):
         try:
             #result_obj = eval(result); -- convert string to object, but is no need now
@@ -153,7 +154,7 @@ def startCommand(update: Update, context: CallbackContext):
                 }
                 #print(coin);
                 coinHis = getHistoryCandle(coin.strip("''"));
-                print(coinHis);
+                #print(coinHis);
                 time.sleep(2);
                 openPrice = coinHis[0][1];
                 closePrice = coinHis[0][4];
@@ -182,7 +183,7 @@ def startCommand(update: Update, context: CallbackContext):
                     result['message']=messageBox;
                     result['name']=coin.strip("''");
                    
-                    print(result);
+                    #print(result);
         
                     time.sleep(5);
                     execbot(result);
