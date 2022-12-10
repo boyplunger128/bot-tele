@@ -26,20 +26,12 @@ def getListCoins():
             if(busdData[i]['priceChangePercent']>busdData[j]['priceChangePercent']):
                 temp=busdData[i]
                 busdData[i]=busdData[j];
-                busdData[j]=temp;
-
-    #f=open('listCoins.txt','w');
+                busdData[j]=temp; 
     listName = [];
     for i in range(100):
         if('BUSD' in busdData[i]['symbol']):
             listName.append(busdData[i]['symbol']);
-    # f.write(str(listName));
-    # f.close();
-
-    # f = open('listCoins.txt','r');
-    # #print(f.read());
-
-    # f.close();
+    #print(f.read());
     return listName;
 
 def getHistoryCandle(SYMBOL):    
@@ -106,12 +98,12 @@ def getMultiIndiValue(SYMBOL,interval):
     return result;
 
 
-
-
 #convert data to list
+
 def Convert(data):
     datanew = data.strip("[]").split(', ')
     return datanew;
+
 
 d2 = date.today();
 def t_updatelistCoins():
@@ -128,6 +120,8 @@ def startCommand(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Please wait... Bot is checking... ^^");
     
     listCoins = getListCoins();
+
+    print(listCoins);
     def execbot(result):
         try:
             #result_obj = eval(result); -- convert string to object, but is no need now
@@ -153,7 +147,7 @@ def startCommand(update: Update, context: CallbackContext):
                     "message":""
                 }
                 #print(coin);
-                coinHis = getHistoryCandle(coin);
+                coinHis = getHistoryCandle(coin.strip("''"));
                 print(coinHis);
                 time.sleep(2);
                 openPrice = coinHis[0][1];

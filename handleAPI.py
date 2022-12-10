@@ -22,18 +22,14 @@ def getListCoins():
                 busdData[i]=busdData[j];
                 busdData[j]=temp;
 
-    f=open('listCoins.txt','w');
+ 
     listName = [];
     for i in range(100):
         if('BUSD' in busdData[i]['symbol']):
             listName.append(busdData[i]['symbol']);
-    f.write(str(listName));
-    f.close();
-
-    f = open('listCoins.txt','r');
+    
     #print(f.read());
-
-    f.close();
+    return listName;
 
 def getHistoryCandle(SYMBOL):    
     params = SYMBOL.strip("''");
@@ -97,5 +93,6 @@ def getMultiIndiValue(SYMBOL,interval):
     print('result is: ',result);
     return result;
 
+print(getListCoins());
 
 
