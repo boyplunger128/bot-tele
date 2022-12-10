@@ -15,14 +15,13 @@ def getListCoins():
     request =  requests.get('https://api.binance.com/api/v1/ticker/24hr');
     time.sleep(5);
     datas =request.json();
-    print('Alls data is: ',datas);
+    #print('Alls data is: ',datas);
     busdData = [];
     for data in datas:
         str = data['symbol'];
         symbolDefault = 'BUSD';
         if(symbolDefault in str):
-            busdData.append(data);
-
+            busdData.append(data);            
     for i in range(len(busdData)):
         for j in range(len(busdData)):
             if(busdData[i]['priceChangePercent']>busdData[j]['priceChangePercent']):
