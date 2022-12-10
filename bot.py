@@ -140,6 +140,7 @@ def startCommand(update: Update, context: CallbackContext):
         time.sleep(5);
     i=0;
     def task():
+        i=i+1;
         if(i%1440==0):
             t_updatelistCoins();
 
@@ -190,9 +191,6 @@ def startCommand(update: Update, context: CallbackContext):
             except Exception:
                 traceback.print_exc();  
                 time.sleep(1); 
-    i=i+1;
-
-
     context.job_queue.run_repeating(task(),1800,context=update.effective_chat.id);    
    
     
