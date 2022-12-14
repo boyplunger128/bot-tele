@@ -1,0 +1,4 @@
+#fix 'interval' in get chart api => using env variables.
+#fix 3 interval time in 1 bot and alert them.
+
+using \n to break the line 
