@@ -188,29 +188,10 @@
 
 # print(os.getenv('INTERVAL'));
 
-from apscheduler.schedulers.blocking import BlockingScheduler;
+import datetime;
 
-sched = BlockingScheduler(timezone='utc');
+now = datetime.datetime.now();
 
-varis = 1;
-def runTask():
-    @sched.scheduled_job('interval',seconds=10)
-    def timed_job():
-        varis = 10;
-        print(varis);
-        
+month = now.hour
 
-    @sched.scheduled_job('interval',seconds=2)
-    def time_job2():
-        varis = 2;
-        print(varis);
-
-    @sched.scheduled_job('interval',seconds=3)
-    def time_job3():
-        varis = 3;
-        print(varis);
-
-    sched.configure();
-    sched.start();
-
-runTask();
+print(month)

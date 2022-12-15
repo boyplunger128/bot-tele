@@ -137,106 +137,122 @@ def startCommand(update: Update, context: CallbackContext):
             link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_BUSD?theme=dark&type=spot \n';
             time.sleep(5);
             if image:
-                context.bot.sendMediaGroup(chat_id=update.effective_chat.id, media=[InputMediaPhoto(image, caption=link_buy)]);
+                context.bot.sendMediaGroup(chat_id=int(result['channelID']), media=[InputMediaPhoto(image, caption=link_buy)]);
                 #context.bot.send_message(chat_id=update.effective_chat.id, text=result['message']);
                 #context.bot.send_message(chat_id=update.effective_chat.id, text=link_buy,disable_web_page_preview=True); 
         except Exception:
             traceback.print_exc();
         time.sleep(5);
-    
-    def sayhello():
-        context.bot.send_message(chat_id=update.effective_chat.id, text="This is thread 2",disable_web_page_preview=True); 
 
-    
-
-    def task():
-        chat_id = update.message.chat_id;
-      
-        print(chat_id);
-
-        if(str(chat_id) =='-1001358121051' ):
-            print(chat_id);
-            i=0;
-            interval=os.getenv('INTERVAL1');
-            
-            now = datetime.datetime.now();
-
-            currentHour = now.hour;
-            currentDays = now.date;
-
-            while(True):                
-                currentRun = datetime.datetime.now();
-                runningHour=currentRun.hour;
-                runningDays=currentRun.date;
-
-                if(runningHour>currentHour):
-                    if(runningHour%4==0):
-                        interval=os.getenv('INTERVAL3');
-                    else:
-                        interval=os.getenv('INTERVAL2');
-                    currentHour=runningHour;
-                else:
-                    interval=os.getenv('INTERVAL1');
-
-                #qua ngay moi thi update lai cai currentHourse = 0, vi qua ngay moi thi thoi gian moi
+    def task():      
+        i=0;
+        interval=os.getenv('INTERVAL1');
+        channelID = os.getenv('CHANNEL1');
         
+        now = datetime.datetime.now();
 
-                if(i%24==0):
-                    t_updatelistCoins();
+        currentHour = now.hour;
+        currentDays = now.day;
 
-                for coin in listCoins:
-                    print(coin,len(listCoins));
-                    try:
-                        result ={
-                            "url":"",
-                            "name":"",
-                            "message":""
-                        }
-                        #print(coin);
-                        
-                        coinHis = getHistoryCandle(coin.strip("''"),interval);
-                        #print(coinHis);
-                        time.sleep(2);
-                        openPrice = coinHis[0][1];
-                        closePrice = coinHis[0][4];
-                        messageBox ='';
-                        flag20 = 0;
-                        flag100 = 0;
-                        maValues = getMultiIndiValue(coin,interval);
-                        time.sleep(2);
-                        if(float(openPrice) < maValues[0] and maValues[0] < float(closePrice)):
-                            flag20=1;
-                        if(float(openPrice) < maValues[1] and maValues[1] < float(closePrice)):
-                            flag100=1;
-                        if(flag100!=0):
-                            if(flag20!=0):
-                                messageBox ='\n'+ coin +' PASSED MA100 & MA20 AT '+interval.upper();
+        while(True):                
+            currentRun = datetime.datetime.now();
+            runningHour=currentRun.hour;
+            runningDays=currentRun.day;
+
+            if(runningHour>currentHour):
+                if(runningHour%4==0):
+                    interval=os.getenv('INTERVAL3');
+                    channelID = os.getenv('CHANNEL3');
+                else:
+                    interval=os.getenv('INTERVAL2');
+                    channelID = os.getenv('CHANNEL2');
+                currentHour=runningHour;
+            else:
+                interval=os.getenv('INTERVAL1');
+                channelID = os.getenv('CHANNEL1');
+
+            #update day by day for month, year.
+
+            if(runningDays > currentDays):
+                currentDays=runningDays;
+                interval=os.getenv('INTERVAL4');
+                channelID = os.getenv('CHANNEL4');
+            else:
+                runningMonth = now.month;
+                if(runningMonth==1 or runningMonth ==3 or runningMonth ==5 or runningMonth==7 or runningMonth==8 or runningMonth==10 or runningMonth == 12):
+                    if(runningDays == 1 and currentDays ==31):
+                        currentDays=0;                            
+                else:
+                    if(runningMonth==2):
+                        currentYear = now.year;
+                        if(currentYear % 4 == 0 and currentYear % 100 !=0 or currentYear % 400 !=0 ):
+                            if(runningDays == 1 and currentDays == 29):
+                                currentDays = 0;
                             else:
-                                messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
+                                if(runningDays == 1 and currentDays == 28):
+                                    currentDays = 0;
                         else:
-                            if(flag20!=0):
-                                messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
-                        if(flag20!=0):
-                            #fix interval here
-                            Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
-                            #print(Url);
-                            result['url']=Url;
-                            result['message']=messageBox;
-                            result['name']=coin.strip("''");
+                            if(runningDays== 1 and currentDays == 31):
+                                currentDays = 0;
+
+                    
+            #qua ngay moi thi update lai cai currentHourse = 0, vi qua ngay moi thi thoi gian moi        
+            if(i%150==0):
+                t_updatelistCoins();
+
+            for coin in listCoins:
+                print(coin,len(listCoins));
+                try:
+                    result ={
+                        "url":"",
+                        "name":"",
+                        "message":"",
+                        "channelID":channelID
+                    }
+                    #print(coin);
                         
-                            #print(result);
+                    coinHis = getHistoryCandle(coin.strip("''"),interval);
+                    #print(coinHis);
+                    time.sleep(2);
+                    openPrice = coinHis[0][1];
+                    closePrice = coinHis[0][4];
+                    messageBox ='';
+                    flag20 = 0;
+                    flag100 = 0;
+                    maValues = getMultiIndiValue(coin,interval);
+                    time.sleep(2);
+                    if(float(openPrice) < maValues[0] and maValues[0] < float(closePrice)):
+                        flag20=1;
+                    if(float(openPrice) < maValues[1] and maValues[1] < float(closePrice)):
+                        flag100=1;
+                    if(flag100!=0):
+                        if(flag20!=0):
+                            messageBox ='\n'+ coin +' PASSED MA100 & MA20 AT '+interval.upper();
+                        else:
+                            messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
+                    else:
+                        if(flag20!=0):
+                            messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
+                    if(flag20!=0):
+                        #fix interval here
+                        Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
+                        #print(Url);
+                        result['url']=Url;
+                        result['message']=messageBox;
+                        result['name']=coin.strip("''");
+                        
+                        #print(result);
                 
-                            time.sleep(5);
-                            execbot(result);
-                        # else:
-                        #     context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
-                    except Exception:
-                        traceback.print_exc();  
-                        time.sleep(1); 
-                i=i+1;
+                        time.sleep(5);
+                        execbot(result);
+                    # else:
+                        #context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
+                except Exception:
+                    traceback.print_exc();  
+                    time.sleep(1); 
+            i=i+1;
     task();
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot is not supported for this channel or group!");
-
     print('bot stopped'); 
 
 
