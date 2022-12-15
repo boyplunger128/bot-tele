@@ -181,9 +181,36 @@
 # result_obj = eval(result);
 # print(result_obj['url']);
 
-import os;
-from dotenv import load_dotenv,find_dotenv
+# import os;
+# from dotenv import load_dotenv,find_dotenv
 
-load_dotenv(find_dotenv());
+# load_dotenv(find_dotenv());
 
-print(os.getenv('INTERVAL'));
+# print(os.getenv('INTERVAL'));
+
+from apscheduler.schedulers.blocking import BlockingScheduler;
+
+sched = BlockingScheduler(timezone='utc');
+
+varis = 1;
+def runTask():
+    @sched.scheduled_job('interval',seconds=10)
+    def timed_job():
+        varis = 10;
+        print(varis);
+        
+
+    @sched.scheduled_job('interval',seconds=2)
+    def time_job2():
+        varis = 2;
+        print(varis);
+
+    @sched.scheduled_job('interval',seconds=3)
+    def time_job3():
+        varis = 3;
+        print(varis);
+
+    sched.configure();
+    sched.start();
+
+runTask();

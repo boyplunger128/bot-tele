@@ -1,4 +1,5 @@
 import time;
+import datetime;
 from telegram.ext import *
 from telegram import *
 from datetime import date;
@@ -7,6 +8,7 @@ import traceback;
 import requests;
 import os;
 from dotenv import load_dotenv,find_dotenv;
+from apscheduler.schedulers.blocking import BlockingScheduler;
 
 #handle API
 
@@ -132,7 +134,7 @@ def startCommand(update: Update, context: CallbackContext):
             #result_obj = eval(result); -- convert string to object, but is no need now
             image = get(result['url']).content;
             symbol = result['name'].replace('BUSD','');
-            link_buy ='\n'+ result['message']+'\nYou can buy it here: https://www.binance.com/vi/trade/'+symbol+'_BUSD?theme=dark&type=spot \n';
+            link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_BUSD?theme=dark&type=spot \n';
             time.sleep(5);
             if image:
                 context.bot.sendMediaGroup(chat_id=update.effective_chat.id, media=[InputMediaPhoto(image, caption=link_buy)]);
@@ -145,71 +147,98 @@ def startCommand(update: Update, context: CallbackContext):
     def sayhello():
         context.bot.send_message(chat_id=update.effective_chat.id, text="This is thread 2",disable_web_page_preview=True); 
 
-    i=0;
+    
 
-    interval = '15m';
+    def task():
+        chat_id = update.message.chat_id;
+      
+        print(chat_id);
 
-    def task(interval):
-        if(i%24==0):
-            t_updatelistCoins();
+        if(str(chat_id) =='-1001358121051' ):
+            print(chat_id);
+            i=0;
+            interval=os.getenv('INTERVAL1');
+            
+            now = datetime.datetime.now();
 
-        for coin in listCoins:
-            print(coin,len(listCoins));
-            try:
-                result ={
-                    "url":"",
-                    "name":"",
-                    "message":""
-                }
-                #print(coin);
-                
-                coinHis = getHistoryCandle(coin.strip("''"),interval);
-                #print(coinHis);
-                time.sleep(2);
-                openPrice = coinHis[0][1];
-                closePrice = coinHis[0][4];
-                messageBox ='';
-                flag20 = 0;
-                flag100 = 0;
-                maValues = getMultiIndiValue(coin,interval);
-                time.sleep(2);
-                if(float(openPrice) < maValues[0] and maValues[0] < float(closePrice)):
-                    flag20=1;
-                if(float(openPrice) < maValues[1] and maValues[1] < float(closePrice)):
-                    flag100=1;
-                if(flag100!=0):
-                    if(flag20!=0):
-                        messageBox ='\n'+ coin +' PASSED MA100 & MA20';
+            currentHour = now.hour;
+            currentDays = now.date;
+
+            while(True):                
+                currentRun = datetime.datetime.now();
+                runningHour=currentRun.hour;
+                runningDays=currentRun.date;
+
+                if(runningHour>currentHour):
+                    if(runningHour%4==0):
+                        interval=os.getenv('INTERVAL3');
                     else:
-                        messageBox ='\n'+coin +' PASSED MA100';
+                        interval=os.getenv('INTERVAL2');
+                    currentHour=runningHour;
                 else:
-                    if(flag20!=0):
-                        messageBox = coin+' PASSED MA20';
-                if(flag20!=0):
-                    #fix interval here
-                    Url = 'h;ttps://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
-                    #print(Url);
-                    result['url']=Url;
-                    result['message']=messageBox;
-                    result['name']=coin.strip("''");
-                   
-                    #print(result);
+                    interval=os.getenv('INTERVAL1');
+
+                #qua ngay moi thi update lai cai currentHourse = 0, vi qua ngay moi thi thoi gian moi
         
-                    time.sleep(5);
-                    execbot(result);
-                # else:
-                #     context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
-            except Exception:
-                traceback.print_exc();  
-                time.sleep(1); 
-    i=i+1;
-    context.job_queue.run_repeating(task(),1200,context=update.effective_chat.id);
+
+                if(i%24==0):
+                    t_updatelistCoins();
+
+                for coin in listCoins:
+                    print(coin,len(listCoins));
+                    try:
+                        result ={
+                            "url":"",
+                            "name":"",
+                            "message":""
+                        }
+                        #print(coin);
+                        
+                        coinHis = getHistoryCandle(coin.strip("''"),interval);
+                        #print(coinHis);
+                        time.sleep(2);
+                        openPrice = coinHis[0][1];
+                        closePrice = coinHis[0][4];
+                        messageBox ='';
+                        flag20 = 0;
+                        flag100 = 0;
+                        maValues = getMultiIndiValue(coin,interval);
+                        time.sleep(2);
+                        if(float(openPrice) < maValues[0] and maValues[0] < float(closePrice)):
+                            flag20=1;
+                        if(float(openPrice) < maValues[1] and maValues[1] < float(closePrice)):
+                            flag100=1;
+                        if(flag100!=0):
+                            if(flag20!=0):
+                                messageBox ='\n'+ coin +' PASSED MA100 & MA20 AT '+interval.upper();
+                            else:
+                                messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
+                        else:
+                            if(flag20!=0):
+                                messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
+                        if(flag20!=0):
+                            #fix interval here
+                            Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
+                            #print(Url);
+                            result['url']=Url;
+                            result['message']=messageBox;
+                            result['name']=coin.strip("''");
+                        
+                            #print(result);
+                
+                            time.sleep(5);
+                            execbot(result);
+                        # else:
+                        #     context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
+                    except Exception:
+                        traceback.print_exc();  
+                        time.sleep(1); 
+                i=i+1;
+    task();
+    context.bot.send_message(chat_id=update.effective_chat.id, text="Bot is not supported for this channel or group!");
+
     print('bot stopped'); 
 
-  
-
-   
-    
 
 def messageHandler(update: Update, context: CallbackContext):
     print('Kaka');
