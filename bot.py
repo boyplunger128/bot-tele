@@ -201,6 +201,7 @@ def startCommand(update: Update, context: CallbackContext):
                 t_updatelistCoins();
 
             for coin in listCoins:
+                print('current interval:'+interval);
                 print(coin,len(listCoins));
                 try:
                     result ={
