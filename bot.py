@@ -25,7 +25,6 @@ def getListCoins():
     for data in datas:
         if('BUSD' in str(data['symbol'][slice(4)]) or 'BUSD' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
             busdData.append(data);
-            break;
 
     for i in range(len(busdData)):
         for j in range(len(busdData)):
