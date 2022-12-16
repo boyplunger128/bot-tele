@@ -23,7 +23,7 @@ def getListCoins():
     #print('Alls data is: ',datas);
     busdData = [];
     for data in datas:
-        if('BUSD' in str(data['symbol'][slice(4)]) or 'BUSD' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
+        if('BUSD' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
             busdData.append(data);
 
     for i in range(len(busdData)):
@@ -163,7 +163,7 @@ def startCommand(update: Update, context: CallbackContext):
                     channelID = os.getenv('CHANNEL2');
                 currentHour=runningHour;
             else:
-                if(runningHour==1 and currentHour == 24):
+                if(runningHour==1 and currentHour == 23):
                     currentHour=0;
                 interval=os.getenv('INTERVAL1');
                 channelID = os.getenv('CHANNEL1');
