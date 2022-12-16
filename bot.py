@@ -233,7 +233,7 @@ def startCommand(update: Update, context: CallbackContext):
                             messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
                     if(flag20!=0):
                         #fix interval here
-                        Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
+                        Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=MA:100&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
                         #print(Url);
                         result['url']=Url;
                         result['message']=messageBox;
