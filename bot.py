@@ -171,7 +171,7 @@ def startCommand(update: Update, context: CallbackContext):
             #update day by day for month, year.
 
             if(runningDays > currentDays):
-                if(runningHour == 7 ):
+                if(runningHour == 11 ):
                     currentDays=runningDays;
                     interval=os.getenv('INTERVAL4');
                     channelID = os.getenv('CHANNEL4');

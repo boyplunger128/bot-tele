@@ -223,4 +223,4 @@ def getListCoins():
     f.close();
     return listName;
 
-getListCoins();
+print(datetime.datetime.now().hour)
