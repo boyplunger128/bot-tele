@@ -23,7 +23,7 @@ def getListCoins():
     #print('Alls data is: ',datas);
     busdData = [];
     for data in datas:
-        if('BUSD' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
+        if('USDT' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
             busdData.append(data);
 
     for i in range(len(busdData)):
