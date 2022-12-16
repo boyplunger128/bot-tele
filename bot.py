@@ -171,9 +171,10 @@ def startCommand(update: Update, context: CallbackContext):
             #update day by day for month, year.
 
             if(runningDays > currentDays):
-                currentDays=runningDays;
-                interval=os.getenv('INTERVAL4');
-                channelID = os.getenv('CHANNEL4');
+                if(runningHour == 7 ):
+                    currentDays=runningDays;
+                    interval=os.getenv('INTERVAL4');
+                    channelID = os.getenv('CHANNEL4');
             else:
                 runningMonth = now.month;
                 if(runningMonth==1 or runningMonth ==3 or runningMonth ==5 or runningMonth==7 or runningMonth==8 or runningMonth==10 or runningMonth == 12):
