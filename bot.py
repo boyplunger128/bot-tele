@@ -23,10 +23,9 @@ def getListCoins():
     #print('Alls data is: ',datas);
     busdData = [];
     for data in datas:
-       for key,value in data.items():
-            if('BUSD' in str(value)):
-                busdData.append(data);
-                break;
+        if('BUSD' in str(data['symbol'][slice(4)]) or 'BUSD' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
+            busdData.append(data);
+            break;
 
     for i in range(len(busdData)):
         for j in range(len(busdData)):
@@ -114,10 +113,7 @@ def Convert(data):
 
 d2 = date.today();
 def t_updatelistCoins():
-    d1 =date.today();
-    thisDay = d1.strftime("%d");
-    if(int(thisDay)!=d2):
-        getListCoins();
+    getListCoins();
 
 updater = Updater(token="5960253722:AAEl6Qn62IOWT-J5SkL0LavLe8E_9ObRT3w");
 dispatcher = updater.dispatcher;
@@ -168,6 +164,8 @@ def startCommand(update: Update, context: CallbackContext):
                     channelID = os.getenv('CHANNEL2');
                 currentHour=runningHour;
             else:
+                if(runningHour==1 and currentHour == 24):
+                    currentHour=0;
                 interval=os.getenv('INTERVAL1');
                 channelID = os.getenv('CHANNEL1');
 
@@ -197,7 +195,7 @@ def startCommand(update: Update, context: CallbackContext):
 
                     
             #qua ngay moi thi update lai cai currentHourse = 0, vi qua ngay moi thi thoi gian moi        
-            if(i%150==0):
+            if(i%24==0):
                 t_updatelistCoins();
 
             for coin in listCoins:

@@ -189,9 +189,38 @@
 # print(os.getenv('INTERVAL'));
 
 import datetime;
+import requests;
+import time;
+import os;
+from dotenv import load_dotenv,find_dotenv;
 
-now = datetime.datetime.now();
 
-month = now.hour
+load_dotenv(find_dotenv());
 
-print(month)
+def getListCoins():
+    request =  requests.get('https://api.binance.com/api/v1/ticker/24hr');
+    time.sleep(5);
+    datas = request.json();
+    #print('Alls data is: ',datas);
+    busdData = [];
+    for data in datas:
+         if('BUSD' in str(data['symbol'][slice(4)]) or 'BUSD' in str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
+            busdData.append(data);
+
+    for i in range(len(busdData)):
+        for j in range(len(busdData)):
+            if(busdData[i]['priceChangePercent']>busdData[j]['priceChangePercent']):
+                temp=busdData[i]
+                busdData[i]=busdData[j];
+                busdData[j]=temp; 
+    listName = [];
+    for i in range(int(os.getenv('AMOUNT_TOP_COIN'))):
+        if('BUSD' in busdData[i]['symbol']):
+            listName.append(busdData[i]['symbol']);
+    #print(f.read());
+    f = open('listCoins.txt','w');
+    f.write(str(listName));
+    f.close();
+    return listName;
+
+getListCoins();
