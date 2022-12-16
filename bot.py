@@ -50,8 +50,8 @@ def getHistoryCandle(SYMBOL,interval):
     return listData;
 
 def getMaValue(SYMBOL,PERIOD):
-    preSymbol = SYMBOL.replace('BUSD','');
-    LastSymol = preSymbol+'/BUSD';
+    preSymbol = SYMBOL.replace('USDT','');
+    LastSymol = preSymbol+'/USDT';
     #print(LastSymol);
     SecretKey = os.getenv('API_KEY_INDIC');
 
@@ -62,8 +62,8 @@ def getMaValue(SYMBOL,PERIOD):
     return data['value'];
 
 def getMultiIndiValue(SYMBOL,interval):
-    # preSymbol = SYMBOL.replace('BUSD','');
-    # LastSymol = preSymbol+'/BUSD';
+    # preSymbol = SYMBOL.replace('USDT','');
+    # LastSymol = preSymbol+'/USDT';
     # print('input value for indicheck',LastSymol);
     lastSymbol = SYMBOL.strip("''");
     #print('last symbol:',lastSymbol);
@@ -128,8 +128,8 @@ def startCommand(update: Update, context: CallbackContext):
         try:
             #result_obj = eval(result); -- convert string to object, but is no need now
             image = get(result['url']).content;
-            symbol = result['name'].replace('BUSD','');
-            link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_BUSD?theme=dark&type=spot \n';
+            symbol = result['name'].replace('USDT','');
+            link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_USDT?theme=dark&type=spot \n';
             time.sleep(5);
             if image:
                 context.bot.sendMediaGroup(chat_id=int(result['channelID']), media=[InputMediaPhoto(image, caption=link_buy)]);
