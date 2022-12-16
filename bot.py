@@ -34,7 +34,7 @@ def getListCoins():
                 busdData[j]=temp; 
     listName = [];
     for i in range(int(os.getenv('AMOUNT_TOP_COIN'))):
-        if('BUSD' in busdData[i]['symbol']):
+        if('USDT' in busdData[i]['symbol']):
             listName.append(busdData[i]['symbol']);
     #print(f.read());
     return listName;
