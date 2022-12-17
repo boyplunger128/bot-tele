@@ -256,6 +256,8 @@ def getListCoins():
     return listTopCoins;
 
 
-getListCoins();
+while(True):
+    getListCoins();
+    time.sleep(2400);
 
 
