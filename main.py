@@ -197,30 +197,65 @@ from dotenv import load_dotenv,find_dotenv;
 
 load_dotenv(find_dotenv());
 
+def getHistoryCandle(SYMBOL,interval):    
+    params = SYMBOL.strip("''");
+    url = 'https://api.binance.com/api/v3/klines?symbol='+params+'&interval='+interval+'&limit=1';
+    request =   requests.get(url);
+    time.sleep(1);
+    listData = request.json();
+    print('requesting...');
+    print(request);
+    return listData;
+
+def sortCoinByPercentagePriceChange(listName):
+    listPercentCoins = [];
+    for name in listName:
+        try:
+            coinsData =  getHistoryCandle(name,'1d');
+            openPrice = coinsData[0][1];
+            closePrice = coinsData[0][4];
+            percentangeChange = ((float(closePrice)-float(openPrice))/float(openPrice))*100;
+            data = {"name":name,"percentangeChange":float(percentangeChange)};
+            listPercentCoins.append(data);
+        except:
+            print('bug ');
+    
+    listTopCoins = [];
+
+    for i in range(int(os.getenv('AMOUNT_TOP_COIN'))):
+        max = -200;
+        index = -1;
+        for i in range(len(listPercentCoins)):
+            if(listPercentCoins[i]['percentangeChange'] > max):
+                index=i;
+                max =listPercentCoins[i]['percentangeChange'];
+        listTopCoins.append(listPercentCoins[index]['name']);
+        listPercentCoins.pop(index);
+    
+    return listTopCoins;
+
+        
 def getListCoins():
-    request =  requests.get('https://api.binance.com/api/v1/ticker/24hr');
+    request =  requests.get('https://api.binance.com/api/v3/ticker/24hr');
     time.sleep(5);
     datas = request.json();
-    print('Alls data is: ',datas);
-    busdData = [];
-    for data in datas:
-         if('USDT' == str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
-            busdData.append(data);
 
-    for i in range(len(busdData)):
-        for j in range(len(busdData)):
-            if(busdData[i]['priceChangePercent']>busdData[j]['priceChangePercent']):
-                temp=busdData[i]
-                busdData[i]=busdData[j];
-                busdData[j]=temp; 
-    listName = [];
-    for i in range(int(os.getenv('AMOUNT_TOP_COIN'))):
-        if('USDT' in busdData[i]['symbol']):
-            listName.append(busdData[i]['symbol']);
+    usdtData = [];
+    for data in datas:
+        if('USDT' == str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
+            usdtData.append(data['symbol']);
+
+    print('Sum coin and time',len(usdtData),' time: ',len(usdtData) * 3);
+    listTopCoins = sortCoinByPercentagePriceChange(usdtData)
+
     #print(f.read());
     f = open('listCoins.txt','w');
-    f.write(str(listName));
+    f.write(str(listTopCoins));
     f.close();
-    return listName;
+    print(listTopCoins);
+    return listTopCoins;
 
-print(datetime.datetime.now().hour)
+
+getListCoins();
+
+

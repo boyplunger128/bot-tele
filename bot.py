@@ -120,9 +120,12 @@ dispatcher = updater.dispatcher;
 def startCommand(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Welcome to crypto hunter");
     context.bot.send_message(chat_id=update.effective_chat.id, text="Please wait... Bot is checking... ^^");
-   
-    listCoins = getListCoins();
-
+    
+    
+    f = open('listCoins.txt','r');
+    result = f.read();
+    listCoins = eval(result);
+    f.close();
     #print(listCoins);
     def execbot(result):
         try:
@@ -153,6 +156,12 @@ def startCommand(update: Update, context: CallbackContext):
             currentRun = datetime.datetime.now();
             runningHour=currentRun.hour;
             runningDays=currentRun.day;
+
+            if(i%15==0):
+                f = open('listCoins.txt','r');
+                result = f.read();
+                listCoins = eval(result);
+                f.close();
 
             if(runningHour>currentHour):
                 if(runningHour%4==0):
@@ -195,8 +204,7 @@ def startCommand(update: Update, context: CallbackContext):
 
                     
             #qua ngay moi thi update lai cai currentHourse = 0, vi qua ngay moi thi thoi gian moi        
-            if(i%24==0):
-                t_updatelistCoins();
+          
 
             for coin in listCoins:
                 print('current interval:'+interval);
