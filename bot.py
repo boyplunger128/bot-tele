@@ -66,6 +66,7 @@ def getMultiIndiValue(SYMBOL,interval):
     # LastSymol = preSymbol+'/USDT';
     # print('input value for indicheck',LastSymol);
     lastSymbol = SYMBOL.strip("''");
+    print('symbol in indicator: ',lastSymbol);
     #print('last symbol:',lastSymbol);
     endpoint = "https://api.taapi.io/bulk";
     
@@ -102,17 +103,6 @@ def getMultiIndiValue(SYMBOL,interval):
     #print('result is: ',result);
     return result;
 
-
-#convert data to list
-
-def Convert(data):
-    datanew = data.strip("[]").split(', ')
-    return datanew;
-
-
-d2 = date.today();
-def t_updatelistCoins():
-    getListCoins();
 
 updater = Updater(token="5960253722:AAEl6Qn62IOWT-J5SkL0LavLe8E_9ObRT3w");
 dispatcher = updater.dispatcher;
