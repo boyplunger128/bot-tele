@@ -83,6 +83,6 @@ print(len(testStr));
 print(testStr[slice(7,9)]);
 
 
-print(testStr[slice(5,9)]);
+print(testStr[slice(0,len(testStr)-4)]);
 print(testStr[slice(6,9)]);
 print(testStr[slice(1,9)]);

@@ -118,7 +118,7 @@ def startCommand(update: Update, context: CallbackContext):
         try:
             #result_obj = eval(result); -- convert string to object, but is no need now
             image = get(result['url']).content;
-            symbol = result['name'][slice(0,len(result['name']-4))];
+            symbol = result['name'][slice(0,len(result['name'])-4)];
             link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_USDT?theme=dark&type=spot';
             time.sleep(2);
             if image:
