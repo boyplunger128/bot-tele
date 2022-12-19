@@ -237,14 +237,15 @@ def sortCoinByPercentagePriceChange(listName):
         
 def getListCoins():
     request =  requests.get('https://api.binance.com/api/v3/ticker/24hr');
-    time.sleep(5);
+    time.sleep(3);
     datas = request.json();
 
     usdtData = [];
     for data in datas:
         if('USDT' == str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
             if('UP' != str(data['symbol'][slice(len(data['symbol'])-6,len(data['symbol'])-4)]) and 'DOWN' not in data['symbol']  and 'BUSD' not in data['symbol']):
-                symbol = str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))]);
+                symbol = str(data['symbol'][slice(0,len(data['symbol'])-4)]);
+                print(symbol);                
                 if('USDC' not in symbol and 'TUSD' not in symbol and 'USC' not in symbol and 'BULL' not in symbol and 'BEAR' not in symbol and 'USD' not in symbol and 'UST' not in symbol and 'PAX' != symbol and 'KMD' != symbol and 'NANO' != symbol and 'FUN' != symbol and 'DAI' != symbol):
                     usdtData.append(data['symbol']);
 
