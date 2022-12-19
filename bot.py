@@ -122,17 +122,14 @@ def startCommand(update: Update, context: CallbackContext):
     context.bot.send_message(chat_id=update.effective_chat.id, text="Please wait... Bot is checking... ^^");
     
     
-    f = open('listCoins.txt','r');
-    result = f.read();
-    listCoins = eval(result);
-    f.close();
+   
     #print(listCoins);
     def execbot(result):
         try:
             #result_obj = eval(result); -- convert string to object, but is no need now
             image = get(result['url']).content;
-            symbol = result['name'].replace('USDT','');
-            link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_USDT?theme=dark&type=spot \n';
+            symbol = result['name'][slice(0,len(result['name']-4))];
+            link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_USDT?theme=dark&type=spot';
             time.sleep(2);
             if image:
                 context.bot.sendMediaGroup(chat_id=int(result['channelID']), media=[InputMediaPhoto(image, caption=link_buy)]);
@@ -151,6 +148,13 @@ def startCommand(update: Update, context: CallbackContext):
 
         currentHour = now.hour;
         currentDays = now.day;
+
+        f = open('listCoins.txt','r');
+        result = f.read();
+        listCoins = eval(result);
+        f.close();
+
+        print(listCoins);
 
         while(True):                
             currentRun = datetime.datetime.now();
@@ -242,15 +246,16 @@ def startCommand(update: Update, context: CallbackContext):
                             messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
                     if(flag20!=0):
                         #fix interval here
+
                         Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=MA:100&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
                         #print(Url);
+
                         result['url']=Url;
                         result['message']=messageBox;
                         result['name']=coin.strip("''");
                         
                         #print(result);
-                
-                        time.sleep(3);
+            
                         execbot(result);
                     # else:
                         #context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);

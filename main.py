@@ -266,7 +266,6 @@ def getListCoins():
     f.write(str(listTopCoins));
     f.close();
     print(listTopCoins);
-    return listTopCoins;
 
 
 while True:
