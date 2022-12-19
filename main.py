@@ -234,25 +234,34 @@ def sortCoinByPercentagePriceChange(listName):
     
     return listTopCoins;
 
+def categoryTradingCoin(datas):
+    usdtData = [];
+    for data in datas:
+        if(int(float(data['volume']))!=0 and 'USDT' in data['symbol']):
+            usdtData.append(data['symbol']);
+    return usdtData;
+
         
 def getListCoins():
     request =  requests.get('https://api.binance.com/api/v3/ticker/24hr');
     time.sleep(3);
-    datas = request.json();
+    reponseData = request.json();
+
+    datas = categoryTradingCoin(reponseData);
+
+    print(datas);
 
     usdtData = [];
     for data in datas:
-        if('USDT' == str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
-            if('UP' != str(data['symbol'][slice(len(data['symbol'])-6,len(data['symbol'])-4)]) and 'DOWN' not in data['symbol']  and 'BUSD' not in data['symbol']):
-                symbol = str(data['symbol'][slice(0,len(data['symbol'])-4)]);
-                print(symbol);                
-                if('USDC' not in symbol and 'TUSD' not in symbol and 'USC' not in symbol and 'BULL' not in symbol and 'BEAR' not in symbol and 'USD' not in symbol and 'UST' not in symbol and 'PAX' != symbol and 'KMD' != symbol and 'NANO' != symbol and 'FUN' != symbol and 'DAI' != symbol):
-                    usdtData.append(data['symbol']);
+        if('UP' != str(data[slice(len(data)-6,len(data)-4)]) and 'DOWN' not in data  and 'BUSD' not in data):
+            symbol = str(data[slice(0,len(data)-4)]);
+            print(symbol);                
+            if('USDC' not in symbol and 'TUSD' not in symbol and 'USC' not in symbol and 'BULL' not in symbol and 'BEAR' not in symbol and 'USD' not in symbol and 'UST' not in symbol and 'PAX' != symbol and 'KMD' != symbol and 'NANO' != symbol and 'FUN' != symbol and 'DAI' != symbol):
+                usdtData.append(data);
 
     print('Sum coin and time',len(usdtData),usdtData);
     listTopCoins = sortCoinByPercentagePriceChange(usdtData)
 
-    #print(f.read());
     f = open('listCoins.txt','w');
     f.write(str(listTopCoins));
     f.close();
@@ -260,6 +269,8 @@ def getListCoins():
     return listTopCoins;
 
 
-getListCoins();
+while True:
+    getListCoins();
+    time.sleep(2400);
 
 
