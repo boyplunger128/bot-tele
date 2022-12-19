@@ -234,7 +234,7 @@ def startCommand(update: Update, context: CallbackContext):
                         flag100=1;
                     if(flag100!=0):
                         if(flag20!=0):
-                            messageBox ='\n'+ coin +' PASSED MA20 AT'+interval.upper();
+                            messageBox ='\n'+ coin +' PASSED MA20 AT '+interval.upper();
                         else:
                             messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
                     else:

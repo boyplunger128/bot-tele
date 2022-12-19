@@ -243,9 +243,12 @@ def getListCoins():
     usdtData = [];
     for data in datas:
         if('USDT' == str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))])):
-            usdtData.append(data['symbol']);
+            if('UP' != str(data['symbol'][slice(len(data['symbol'])-6,len(data['symbol'])-4)]) and 'DOWN' not in data['symbol']  and 'BUSD' not in data['symbol']):
+                symbol = str(data['symbol'][slice(len(data['symbol'])-4,len(data['symbol']))]);
+                if('USDC' not in symbol and 'TUSD' not in symbol and 'USC' not in symbol):
+                    usdtData.append(data['symbol']);
 
-    print('Sum coin and time',len(usdtData),' time: ',len(usdtData) * 3);
+    print('Sum coin and time',len(usdtData),usdtData);
     listTopCoins = sortCoinByPercentagePriceChange(usdtData)
 
     #print(f.read());
@@ -256,8 +259,6 @@ def getListCoins():
     return listTopCoins;
 
 
-while(True):
-    getListCoins();
-    time.sleep(2400);
+getListCoins();
 
 
