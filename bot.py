@@ -43,7 +43,7 @@ def getHistoryCandle(SYMBOL,interval):
     params = SYMBOL.strip("''");
     url = 'https://api.binance.com/api/v3/klines?symbol='+params+'&interval='+interval+'&limit=2';
     request =   requests.get(url);
-    time.sleep(5);
+    time.sleep(2);
     listData = request.json();
     print('requesting...');
     print(request);
@@ -57,7 +57,7 @@ def getMaValue(SYMBOL,PERIOD):
 
     url = 'https://api.taapi.io/ma?secret='+SecretKey+'&exchange=binance&symbol='+LastSymol+'&interval='+os.getenv('INTERVAL2')+'&period='+PERIOD;
     request =   requests.get(url);
-    time.sleep(3);
+    time.sleep(2);
     data = request.json();
     return data['value'];
 
@@ -91,7 +91,7 @@ def getMultiIndiValue(SYMBOL,interval):
     
     # Send POST request and save the response as response object 
     response = requests.post(url = endpoint, json = parameters)
-    time.sleep(3);
+    time.sleep(2);
     # Extract data in json format 
     #print(response);
     data = response.json();
@@ -133,7 +133,7 @@ def startCommand(update: Update, context: CallbackContext):
             image = get(result['url']).content;
             symbol = result['name'].replace('USDT','');
             link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_USDT?theme=dark&type=spot \n';
-            time.sleep(5);
+            time.sleep(2);
             if image:
                 context.bot.sendMediaGroup(chat_id=int(result['channelID']), media=[InputMediaPhoto(image, caption=link_buy)]);
                 #context.bot.send_message(chat_id=update.effective_chat.id, text=result['message']);
@@ -250,13 +250,13 @@ def startCommand(update: Update, context: CallbackContext):
                         
                         #print(result);
                 
-                        time.sleep(5);
+                        time.sleep(3);
                         execbot(result);
                     # else:
                         #context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
                 except Exception:
                     traceback.print_exc();  
-                    time.sleep(1); 
+                    time.sleep(2); 
             i=i+1;
     task();
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot is not supported for this channel or group!");
