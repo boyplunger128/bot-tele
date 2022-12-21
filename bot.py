@@ -143,7 +143,7 @@ def startCommand(update: Update, context: CallbackContext):
         result = f.read();
         listCoins = eval(result);
         f.close();
-
+        todayChecked = False;
         print(listCoins);
 
         while(True):                
@@ -156,6 +156,8 @@ def startCommand(update: Update, context: CallbackContext):
                 result = f.read();
                 listCoins = eval(result);
                 f.close();
+                context.bot.sendMediaGroup(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
+
 
             if(runningHour>currentHour):
                 if(runningHour%4==0):
@@ -173,11 +175,12 @@ def startCommand(update: Update, context: CallbackContext):
 
             #update day by day for month, year.
 
-            if(runningDays > currentDays):
+            if(runningDays > currentDays or todayChecked == False):
                 if(runningHour == 11 ):
                     currentDays=runningDays;
                     interval=os.getenv('INTERVAL4');
                     channelID = os.getenv('CHANNEL4');
+                    todayChecked = True;
             else:
                 runningMonth = now.month;
                 if(runningMonth==1 or runningMonth ==3 or runningMonth ==5 or runningMonth==7 or runningMonth==8 or runningMonth==10 or runningMonth == 12):
