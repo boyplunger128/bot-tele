@@ -99,15 +99,15 @@ def getMultiIndiValue(SYMBOL,interval):
     #print(response);
     data = response.json();
     result={
-        "ma20_now":0,
-        "ma20_past":0,
-        "ma100_now":0,
-        "ma100_past":0,
+        "ma20_1":0,
+        "ma20_2":0,
+        "ma100_1":0,
+        "ma100_2":0,
     }
-    result["ma20_1"]=data['data'][0]['result'];
-    result["ma20_2"]=data['data'][2]['result'];
-    result["ma100_1"]=data['data'][3]['result'];
-    result["ma100_2"]=data['data'][5]['result'];
+    result["ma20_1"]=data['data'][1]['result']['value'];
+    result["ma20_2"]=data['data'][2]['result']['value'];
+    result["ma100_1"]=data['data'][4]['result']['value'];
+    result["ma100_2"]=data['data'][5]['result']['value'];
 
     #print('result is: ',result);
     return result;
