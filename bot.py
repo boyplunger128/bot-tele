@@ -94,7 +94,7 @@ def getMultiIndiValue(SYMBOL,interval):
     }
     
     response = requests.post(url = endpoint, json = parameters)
-    time.sleep(1);
+    time.sleep(2);
     # Extract data in json format 
     #print(response);
     data = response.json();
@@ -236,12 +236,12 @@ def startCommand(update: Update, context: CallbackContext):
                     flag100 = 0;
                     maValues = getMultiIndiValue(coin,interval);
                     time.sleep(1);
-                    if(float(lowestPrice1) < maValues["ma20_2"] and maValues["ma20_2"] < float(highestPrice1)):
-                        if(float(closePrice2) < maValues["ma20_1"]):
+                    if(float(lowestPrice1) < float(maValues["ma20_2"]) and float(maValues["ma20_2"]) < float(highestPrice1)):
+                        if(float(closePrice2) < float(maValues["ma20_1"])):
                             flag20=1;
                     
-                    if(float(lowestPrice1) < maValues["ma100_2"] and maValues["ma100_2"] < float(highestPrice1)):
-                        if(float(closePrice2) < maValues["ma100_1"]):
+                    if(float(lowestPrice1) < float(maValues["ma100_2"]) and float(maValues["ma100_2"]) < float(highestPrice1)):
+                        if(float(closePrice2) < float(maValues["ma100_1"])):
                             flag100=1;
                    
                     if(flag100!=0):
