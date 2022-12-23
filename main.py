@@ -256,10 +256,10 @@ def getListCoins():
         if('UP' != str(data[slice(len(data)-6,len(data)-4)]) and 'DOWN' not in data  and 'BUSD' not in data):
             symbol = str(data[slice(0,len(data)-4)]);
             print(symbol);                
-            if('USDC' not in symbol and 'TUSD' not in symbol and 'USC' not in symbol and 'BULL' not in symbol and 'BEAR' not in symbol and 'USD' not in symbol and 'UST' not in symbol and 'PAX' != symbol and 'KMD' != symbol and 'NANO' != symbol and 'FUN' != symbol and 'DAI' != symbol):
+            if('USDC' not in symbol and 'TUSD' not in symbol and 'USC' not in symbol and 'BULL' not in symbol and 'BEAR' not in symbol and 'USD' not in symbol and 'UST' not in symbol and 'PAX' != symbol and 'KMD' != symbol and 'NANO' != symbol and 'FUN' != symbol and 'DAI' != symbol and 'AUD' != symbol and 'GBP' != symbol and 'EUR' != symbol):
                 usdtData.append(data);
 
-    print('Sum coin and time',len(usdtData),usdtData);
+    print('Sum coin and time',len(usdtData));
     #listTopCoins = sortCoinByPercentagePriceChange(usdtData)
 
     f = open('listCoins.txt','w');
