@@ -222,7 +222,7 @@ def sortCoinByPercentagePriceChange(listName):
     
     listTopCoins = [];
 
-    for i in range(int(os.getenv('AMOUNT_TOP_COIN'))):
+    for i in len(listName):
         max = -200;
         index = -1;
         for i in range(len(listPercentCoins)):
@@ -260,16 +260,16 @@ def getListCoins():
                 usdtData.append(data);
 
     print('Sum coin and time',len(usdtData),usdtData);
-    listTopCoins = sortCoinByPercentagePriceChange(usdtData)
+    #listTopCoins = sortCoinByPercentagePriceChange(usdtData)
 
     f = open('listCoins.txt','w');
-    f.write(str(listTopCoins));
+    f.write(str(usdtData));
     f.close();
-    print(listTopCoins);
+    print(usdtData);
 
 
 while True:
     getListCoins();
-    time.sleep(2400);
+    time.sleep(3600);
 
 

@@ -18,7 +18,7 @@ load_dotenv(find_dotenv());
 
 def getListCoins():
     request =  requests.get('https://api.binance.com/api/v1/ticker/24hr');
-    time.sleep(5);
+    time.sleep(2);
     datas =request.json();
     #print('Alls data is: ',datas);
     busdData = [];
@@ -41,9 +41,9 @@ def getListCoins():
 
 def getHistoryCandle(SYMBOL,interval):    
     params = SYMBOL.strip("''");
-    url = 'https://api.binance.com/api/v3/klines?symbol='+params+'&interval='+interval+'&limit=2';
+    url = 'https://api.binance.com/api/v3/klines?symbol='+params+'&interval='+interval+'&limit=3';
     request =   requests.get(url);
-    time.sleep(2);
+    time.sleep(1);
     listData = request.json();
     print('requesting...');
     print(request);
@@ -80,28 +80,38 @@ def getMultiIndiValue(SYMBOL,interval):
             "indicators": [             
             {
                 "indicator":"ma",
-                "period":os.getenv('PERIOD20')
+                "period":os.getenv('PERIOD20'),
+                "backtracks":3
             },
             {        
                 "indicator": "ma",
-                "period": os.getenv('PERIOD100')
+                "period": os.getenv('PERIOD100'),
+                "backtracks":3
             }
-            ]
+            ],
+            
         }
     }
     
-    # Send POST request and save the response as response object 
     response = requests.post(url = endpoint, json = parameters)
-    time.sleep(2);
+    time.sleep(1);
     # Extract data in json format 
     #print(response);
     data = response.json();
-    result = [];
-    result.append(data['data'][0]['result']['value'])
-    result.append(data['data'][1]['result']['value'])
+    result={
+        "ma20_now":0,
+        "ma20_past":0,
+        "ma100_now":0,
+        "ma100_past":0,
+    }
+    result["ma20_now"]=data['data'][0]['result'];
+    result["ma20_past"]=data['data'][2]['result'];
+    result["ma100_now"]=data['data'][3]['result'];
+    result["ma100_past"]=data['data'][5]['result'];
 
     #print('result is: ',result);
     return result;
+
 
 
 updater = Updater(token="5960253722:AAEl6Qn62IOWT-J5SkL0LavLe8E_9ObRT3w");
@@ -120,14 +130,14 @@ def startCommand(update: Update, context: CallbackContext):
             image = get(result['url']).content;
             symbol = result['name'][slice(0,len(result['name'])-4)];
             link_buy = result['message']+'\n\nYou can buy it here:\nhttps://www.binance.com/vi/trade/'+symbol+'_USDT?theme=dark&type=spot';
-            time.sleep(2);
+            time.sleep(1);
             if image:
                 context.bot.sendMediaGroup(chat_id=int(result['channelID']), media=[InputMediaPhoto(image, caption=link_buy)]);
                 #context.bot.send_message(chat_id=update.effective_chat.id, text=result['message']);
                 #context.bot.send_message(chat_id=update.effective_chat.id, text=link_buy,disable_web_page_preview=True); 
         except Exception:
             traceback.print_exc();
-        time.sleep(5);
+        time.sleep(2);
 
     def task():      
         i=0;
@@ -156,7 +166,7 @@ def startCommand(update: Update, context: CallbackContext):
                 result = f.read();
                 listCoins = eval(result);
                 f.close();
-                context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
+                #context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
 
 
             if(runningHour>currentHour):
@@ -217,27 +227,32 @@ def startCommand(update: Update, context: CallbackContext):
                         
                     coinHis = getHistoryCandle(coin.strip("''"),interval);
                     #print(coinHis);
-                    time.sleep(2);
-                    openPrice = coinHis[0][1];
-                    closePrice = coinHis[0][4];
+                    time.sleep(1);
+                    highestPrice1 = coinHis[0][2];
+                    lowestPrice1 = coinHis[0][3];
+                    closePrice2 = coinHis[1][4];
                     messageBox ='';
                     flag20 = 0;
                     flag100 = 0;
                     maValues = getMultiIndiValue(coin,interval);
-                    time.sleep(2);
-                    if(float(openPrice) < maValues[0] and maValues[0] < float(closePrice)):
-                        flag20=1;
-                    if(float(openPrice) < maValues[1] and maValues[1] < float(closePrice)):
-                        flag100=1;
+                    time.sleep(1);
+                    if(float(lowestPrice1) < maValues["ma20_2"] and maValues["ma20_2"] < float(highestPrice1)):
+                        if(float(closePrice2) < maValues["ma20_1"]):
+                            flag20=1;
+                    
+                    if(float(lowestPrice1) < maValues["ma100_2"] and maValues["ma100_2"] < float(highestPrice1)):
+                        if(float(closePrice2) < maValues["ma100_1"]):
+                            flag100=1;
+                   
                     if(flag100!=0):
                         if(flag20!=0):
-                            messageBox ='\n'+ coin +' PASSED MA20 AT '+interval.upper();
+                            messageBox ='\n'+ coin +' PASSED MA20 & MA100 AT '+interval.upper();
                         else:
                             messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
                     else:
                         if(flag20!=0):
                             messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
-                    if(flag20!=0):
+                    if(flag20!=0 or flag100 != 0):
                         #fix interval here
 
                         Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=MA:100&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
