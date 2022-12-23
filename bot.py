@@ -237,11 +237,11 @@ def startCommand(update: Update, context: CallbackContext):
                     maValues = getMultiIndiValue(coin,interval);
                     time.sleep(1);
                     if(float(lowestPrice1) < float(maValues["ma20_2"]) and float(maValues["ma20_2"]) < float(highestPrice1)):
-                        if(float(closePrice2) < float(maValues["ma20_1"])):
+                        if(float(closePrice2) > float(maValues["ma20_1"])):
                             flag20=1;
                     
                     if(float(lowestPrice1) < float(maValues["ma100_2"]) and float(maValues["ma100_2"]) < float(highestPrice1)):
-                        if(float(closePrice2) < float(maValues["ma100_1"])):
+                        if(float(closePrice2) > float(maValues["ma100_1"])):
                             flag100=1;
                    
                     if(flag100!=0):
