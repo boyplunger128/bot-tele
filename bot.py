@@ -141,8 +141,8 @@ def startCommand(update: Update, context: CallbackContext):
 
     def task():      
         i=0;
-        interval=os.getenv('INTERVAL1');
-        channelID = os.getenv('CHANNEL1');
+        interval=os.getenv('INTERVAL2');
+        channelID = os.getenv('CHANNEL2');
         
         now = datetime.datetime.now();
 
@@ -180,8 +180,8 @@ def startCommand(update: Update, context: CallbackContext):
             else:
                 if(runningHour==1 and currentHour == 23):
                     currentHour=0;
-                interval=os.getenv('INTERVAL1');
-                channelID = os.getenv('CHANNEL1');
+                interval=os.getenv('INTERVAL2');
+                channelID = os.getenv('CHANNEL2');
 
             #update day by day for month, year.
 
