@@ -141,8 +141,8 @@ def startCommand(update: Update, context: CallbackContext):
 
     def task():      
         i=0;
-        interval=os.getenv('INTERVAL2');
-        channelID = os.getenv('CHANNEL2');
+        interval='';
+        channelID = '';
         
         now = datetime.datetime.now();
 
@@ -161,7 +161,7 @@ def startCommand(update: Update, context: CallbackContext):
             runningHour=currentRun.hour;
             runningDays=currentRun.day;
 
-            if(i%15==0):
+            if(i%75==0):
                 f = open('listCoins.txt','r');
                 result = f.read();
                 listCoins = eval(result);
@@ -180,8 +180,8 @@ def startCommand(update: Update, context: CallbackContext):
             else:
                 if(runningHour==1 and currentHour == 23):
                     currentHour=0;
-                interval=os.getenv('INTERVAL2');
-                channelID = os.getenv('CHANNEL2');
+                    interval=os.getenv('INTERVAL2');
+                    channelID = os.getenv('CHANNEL2');
 
             #update day by day for month, year.
 
@@ -213,64 +213,67 @@ def startCommand(update: Update, context: CallbackContext):
             #qua ngay moi thi update lai cai currentHourse = 0, vi qua ngay moi thi thoi gian moi        
           
 
-            for coin in listCoins:
-                print('current interval:'+interval);
-                print(coin,len(listCoins));
-                try:
-                    result ={
-                        "url":"",
-                        "name":"",
-                        "message":"",
-                        "channelID":channelID
-                    }
-                    #print(coin);
+            if(interval!=''):
+                for coin in listCoins:
+                    print('current interval:'+interval);
+                    print(coin,len(listCoins));
+                    try:
+                        result ={
+                            "url":"",
+                            "name":"",
+                            "message":"",
+                            "channelID":channelID
+                        }
+                        #print(coin);
+                            
+                        coinHis = getHistoryCandle(coin.strip("''"),interval);
+                        #print(coinHis);
+                        time.sleep(1);
+                        highestPrice1 = coinHis[0][2];
+                        lowestPrice1 = coinHis[0][3];
+                        closePrice2 = coinHis[1][4];
+                        messageBox ='';
+                        flag20 = 0;
+                        flag100 = 0;
+                        maValues = getMultiIndiValue(coin,interval);
+                        time.sleep(1);
+                        if(float(lowestPrice1) < float(maValues["ma20_2"]) and float(maValues["ma20_2"]) < float(highestPrice1)):
+                            if(float(closePrice2) > float(maValues["ma20_1"])):
+                                flag20=1;
                         
-                    coinHis = getHistoryCandle(coin.strip("''"),interval);
-                    #print(coinHis);
-                    time.sleep(1);
-                    highestPrice1 = coinHis[0][2];
-                    lowestPrice1 = coinHis[0][3];
-                    closePrice2 = coinHis[1][4];
-                    messageBox ='';
-                    flag20 = 0;
-                    flag100 = 0;
-                    maValues = getMultiIndiValue(coin,interval);
-                    time.sleep(1);
-                    if(float(lowestPrice1) < float(maValues["ma20_2"]) and float(maValues["ma20_2"]) < float(highestPrice1)):
-                        if(float(closePrice2) > float(maValues["ma20_1"])):
-                            flag20=1;
+                        if(float(lowestPrice1) < float(maValues["ma100_2"]) and float(maValues["ma100_2"]) < float(highestPrice1)):
+                            if(float(closePrice2) > float(maValues["ma100_1"])):
+                                flag100=1;
                     
-                    if(float(lowestPrice1) < float(maValues["ma100_2"]) and float(maValues["ma100_2"]) < float(highestPrice1)):
-                        if(float(closePrice2) > float(maValues["ma100_1"])):
-                            flag100=1;
-                   
-                    if(flag100!=0):
-                        if(flag20!=0):
-                            messageBox ='\n'+ coin +' PASSED MA20 & MA100 AT '+interval.upper();
+                        if(flag100!=0):
+                            if(flag20!=0):
+                                messageBox ='\n'+ coin +' PASSED MA20 & MA100 AT '+interval.upper();
+                            else:
+                                messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
                         else:
-                            messageBox ='\n'+coin +' PASSED MA100 AT '+interval.upper();
-                    else:
-                        if(flag20!=0):
-                            messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
-                    if(flag20!=0 or flag100 != 0):
-                        #fix interval here
+                            if(flag20!=0):
+                                messageBox ='\n'+ coin+' PASSED MA20 AT '+interval.upper();
+                        if(flag20!=0 or flag100 != 0):
+                            #fix interval here
 
-                        Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=MA:100&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
-                        #print(Url);
+                            Url = 'https://api.chart-img.com/v1/tradingview/advanced-chart?interval='+interval+'&symbol='+coin+'&studies=MA:20&studies=MA:100&studies=RSI&key='+os.getenv('YOUR_API_KEY_CHART');
+                            #print(Url);
 
-                        result['url']=Url;
-                        result['message']=messageBox;
-                        result['name']=coin.strip("''");
-                        
-                        #print(result);
-            
-                        execbot(result);
-                    # else:
-                        #context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
-                except Exception:
-                    traceback.print_exc();  
-                    time.sleep(2); 
+                            result['url']=Url;
+                            result['message']=messageBox;
+                            result['name']=coin.strip("''");
+                            
+                            #print(result);
+                
+                            execbot(result);
+                        # else:
+                            #context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
+                    except Exception:
+                        traceback.print_exc();  
+                        time.sleep(2); 
+                interval = '';
             i=i+1;
+            time.sleep(120);
     task();
     context.bot.send_message(chat_id=update.effective_chat.id, text="Bot is not supported for this channel or group!");
     print('bot stopped'); 
