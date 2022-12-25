@@ -222,7 +222,7 @@ def sortCoinByPercentagePriceChange(listName):
     
     listTopCoins = [];
 
-    for i in int(os.getenv('AMOUNT_TOP_COIN')):
+    for i in range(int(os.getenv('AMOUNT_TOP_COIN'))):
         max = -200;
         index = -1;
         for i in range(len(listPercentCoins)):
