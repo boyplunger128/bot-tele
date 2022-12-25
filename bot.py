@@ -161,18 +161,16 @@ def startCommand(update: Update, context: CallbackContext):
             runningHour=currentRun.hour;
             runningDays=currentRun.day;
 
-            if(i%75==0):
-                f = open('listCoins.txt','r');
-                result = f.read();
-                listCoins = eval(result);
-                f.close();
-                #context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
-
 
             if(runningHour>currentHour):
                 if(runningHour%4==0):
                     interval=os.getenv('INTERVAL3');
                     channelID = os.getenv('CHANNEL3');
+                    f = open('listCoins.txt','r');
+                    result = f.read();
+                    listCoins = eval(result);
+                    f.close();
+                    context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
                 else:
                     interval=os.getenv('INTERVAL2');
                     channelID = os.getenv('CHANNEL2');
@@ -190,7 +188,7 @@ def startCommand(update: Update, context: CallbackContext):
                     currentDays=runningDays;
                     interval=os.getenv('INTERVAL4');
                     channelID = os.getenv('CHANNEL4');
-                    todayChecked = True;
+                    todayChecked = True;                   
             else:
                 runningMonth = now.month;
                 if(runningMonth==1 or runningMonth ==3 or runningMonth ==5 or runningMonth==7 or runningMonth==8 or runningMonth==10 or runningMonth == 12):
