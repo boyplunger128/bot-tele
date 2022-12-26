@@ -266,8 +266,9 @@ def startCommand(update: Update, context: CallbackContext):
                             execbot(result);
                         # else:
                             #context.bot.send_message(chat_id=update.effective_chat.id, text=alertCoin);
-                    except Exception:
-                        traceback.print_exc();  
+                    except Exception as e:
+                        traceback.print_exc();
+                        context.bot.send_message(chat_id=int("-870475226"), text=str(e));
                         time.sleep(2); 
                 interval = '';
             i=i+1;

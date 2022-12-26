@@ -244,7 +244,7 @@ def categoryTradingCoin(datas):
         
 def getListCoins():
     request =  requests.get('https://api.binance.com/api/v3/ticker/24hr');
-    time.sleep(3);
+    time.sleep(1);
     reponseData = request.json();
 
     datas = categoryTradingCoin(reponseData);
@@ -270,6 +270,6 @@ def getListCoins():
 
 while True:
     getListCoins();
-    time.sleep(3600);
+    time.sleep(2400);
 
 
