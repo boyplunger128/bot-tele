@@ -229,7 +229,7 @@ def sortCoinByPercentagePriceChange(listName):
             if(listPercentCoins[i]['percentangeChange'] > max):
                 index=i;
                 max =listPercentCoins[i]['percentangeChange'];
-        listTopCoins.append(listPercentCoins[index]['name']);
+        listTopCoins.append(listPercentCoins[index]);
         listPercentCoins.pop(index);
     
     return listTopCoins;

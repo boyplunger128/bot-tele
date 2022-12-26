@@ -166,14 +166,14 @@ def startCommand(update: Update, context: CallbackContext):
                 if(runningHour%4==0):
                     interval=os.getenv('INTERVAL3');
                     channelID = os.getenv('CHANNEL3');
+                else:
+                    interval=os.getenv('INTERVAL2');
+                    channelID = os.getenv('CHANNEL2');
                     f = open('listCoins.txt','r');
                     result = f.read();
                     listCoins = eval(result);
                     f.close();
                     context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
-                else:
-                    interval=os.getenv('INTERVAL2');
-                    channelID = os.getenv('CHANNEL2');
                 currentHour=runningHour;
             else:
                 if(runningHour==1 and currentHour == 23):
@@ -212,7 +212,8 @@ def startCommand(update: Update, context: CallbackContext):
           
 
             if(interval!=''):
-                for coin in listCoins:
+                for coinData in listCoins:
+                    coin = coinData['name'];
                     print('current interval:'+interval);
                     print(coin,len(listCoins));
                     try:
