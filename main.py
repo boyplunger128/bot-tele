@@ -270,6 +270,6 @@ def getListCoins():
 
 while True:
     getListCoins();
-    time.sleep(2400);
+    time.sleep(5);
 
 
