@@ -173,7 +173,7 @@ def startCommand(update: Update, context: CallbackContext):
                     result = f.read();
                     listCoins = eval(result);
                     f.close();
-                    context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
+                    #context.bot.send_message(chat_id=int(os.getenv('CHANNEL3')),text = listCoins);
                 currentHour=runningHour;
             else:
                 if(runningHour==1 and currentHour == 23):
